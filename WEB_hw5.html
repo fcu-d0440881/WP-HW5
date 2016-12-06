@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>HW5_Ajax_test</title>
+		<style>
+			table{
+				boarder: collapse;
+			}
+			td{
+				border: 1px solid black;
+			}
+			td.pic1,img{
+				height: 200px;
+				width: 200px;
+			}
+			td.name{
+				height: 50px;
+				width: 200px;
+				text-align: center;
+			}
+		</style>
+		<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script>
+			$(function(){
+				$.ajax({
+					url : "http://140.134.26.71:58080/web-prog/Hotels",
+					type : "GET",
+					dataType : "json",
+					success : function(data){
+						var items = data.Infos.Info;
+						var cnt_pic = 0;
+						var len = items.length;
+						$("#attractions").append('<table><tr class = "name">');
+						for(var i = 0; i < len; i++){
+							var name = items[i].Name;
+							$("#attractions").append('<td class = "name">' + name + '</td>');
+							if(i%6 == 5 || i == len-1){ 
+								$("#attractions").append('</tr><tr class = "pic1">');
+								for(var j = cnt_pic; j <= i; j++){
+									var web = items[j].Website;
+									var imgURL = items[j].Picture1;
+									$("#attractions").append('<td class = "pic1"><a target = "_blank" href = "' + web + '"><img src = "' + imgURL + '"></a>');
+								}
+								if(i != len-1){
+									$("#attractions").append('</tr><tr class = "name">');
+								}
+								else{
+									$("#attractions").append('</tr>');
+								}
+								cnt_pic = i+1;
+							}
+						}
+						$("#attractions").append('</table>');
+					},
+					error : function(){
+						alert("Not load");
+					}
+				});
+			});	
+		</script>
+	</head>
+	<body>
+		<div id = "attractions"></div>
+	</body>
+</html>
